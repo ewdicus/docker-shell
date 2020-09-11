@@ -12,6 +12,11 @@ DEFAULT_SHELL_COMMAND = '/bin/sh -c "[ -e /bin/bash ] && /bin/bash || /bin/sh"'
 app = typer.Typer()
 docker_client = get_docker_client_or_none()
 
+# Get and hold on to the list of containers.
+container_list = []
+if docker_client:
+    container_list = docker_client.containers.list()
+
 
 def display_error(text):
     """Display the text prefixed with "Error"""
@@ -27,11 +32,8 @@ def display_containers_table(containers: List[docker.models.containers.Container
 
 def suggest_containers(incomplete: str):
     """Provide suggestions for container names"""
-    if not docker_client:
-        return []
-    containers = docker_client.containers.list()
     # If this returns an array of one item, that'll actually complete.
-    return [c.name for c in containers if c.name.startswith(incomplete)]
+    return [c.name for c in container_list if c.name.startswith(incomplete)]
 
 
 @app.command()
@@ -58,11 +60,10 @@ def main(
         raise typer.Exit(1)
 
     if not container:
-        containers = docker_client.containers.list()
-        if not containers:
+        if not container_list:
             typer.echo(info_text("\nNo containers running\n"))
         else:
-            display_containers_table(containers)
+            display_containers_table(container_list)
         raise typer.Exit()
 
     try:
