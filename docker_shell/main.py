@@ -15,7 +15,7 @@ docker_client = get_docker_client_or_none()
 
 def display_error(text):
     """Display the text prefixed with "Error"""
-    typer.echo(f"\n\n{error_text('Error:')} {text}\n", err=True)
+    typer.echo(f"\n{error_text('Error:')} {text}\n", err=True)
 
 
 def display_containers_table(containers: List[docker.models.containers.Container]):
@@ -26,13 +26,10 @@ def display_containers_table(containers: List[docker.models.containers.Container
 
 
 def suggest_containers(incomplete: str):
+    """Provide suggestions for container names"""
     if not docker_client:
-        display_error("Could not connect to Docker. Is it running?")
         return []
     containers = docker_client.containers.list()
-    if not containers:
-        # typer.echo(f"\n\n{info_text('No containers running')}\n", err=True)
-        return []
     # If this returns an array of one item, that'll actually complete.
     return [c.name for c in containers if c.name.startswith(incomplete)]
 
