@@ -12,10 +12,15 @@ DEFAULT_SHELL_COMMAND = '/bin/sh -c "[ -e /bin/bash ] && /bin/bash || /bin/sh"'
 app = typer.Typer()
 docker_client = get_docker_client_or_none()
 
+# Get and hold on to the list of containers.
+container_list = []
+if docker_client:
+    container_list = docker_client.containers.list()
+
 
 def display_error(text):
     """Display the text prefixed with "Error"""
-    typer.echo(f"\n\n{error_text('Error:')} {text}\n", err=True)
+    typer.echo(f"\n{error_text('Error:')} {text}\n", err=True)
 
 
 def display_containers_table(containers: List[docker.models.containers.Container]):
@@ -26,15 +31,9 @@ def display_containers_table(containers: List[docker.models.containers.Container
 
 
 def suggest_containers(incomplete: str):
-    if not docker_client:
-        display_error("Could not connect to Docker. Is it running?")
-        return []
-    containers = docker_client.containers.list()
-    if not containers:
-        # typer.echo(f"\n\n{info_text('No containers running')}\n", err=True)
-        return []
+    """Provide suggestions for container names"""
     # If this returns an array of one item, that'll actually complete.
-    return [c.name for c in containers if c.name.startswith(incomplete)]
+    return [c.name for c in container_list if c.name.startswith(incomplete)]
 
 
 @app.command()
@@ -58,15 +57,14 @@ def main(
     """
     if not docker_client:
         display_error("Could not connect to Docker. Is it running?")
-        raise typer.Exit()
+        raise typer.Exit(1)
 
     if not container:
-        containers = docker_client.containers.list()
-        if not containers:
+        if not container_list:
             typer.echo(info_text("\nNo containers running\n"))
         else:
-            display_containers_table(containers)
-        raise typer.Exit(1)
+            display_containers_table(container_list)
+        raise typer.Exit()
 
     try:
         docker_container = docker_client.containers.get(container)
