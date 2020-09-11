@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "docker-shell"
+version = "0.1.0"
+description = "CLI tool to shell into running docker containers"
+authors = ["Elliott <elliott@amino.com>"]
+readme = "README.md"
+
+[tool.poetry.scripts]
+docker-shell = "docker_shell.main:app"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+typer = {extras = ["all"], version = "^0.3.2"}
+docker = "^4.3.1"
+tabulate = "^0.8.7"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+mypy = "^0.782"
+pylint = "^2.6.0"
+flake8 = "^3.8.3"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

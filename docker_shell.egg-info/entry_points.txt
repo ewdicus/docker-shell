@@ -1,0 +1,3 @@
+[console_scripts]
+docker-shell = docker_shell.main:app
+

@@ -1,0 +1,11 @@
+Metadata-Version: 1.2
+Name: docker-shell
+Version: 0.1.0
+Summary: CLI tool to shell into running docker containers
+Home-page: UNKNOWN
+Author: Elliott
+Author-email: elliott@amino.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Requires-Python: >=3.8,<4.0
