@@ -55,7 +55,7 @@ def main(
     """
     if not docker_client:
         display_error("Could not connect to Docker. Is it running?")
-        raise typer.Exit()
+        raise typer.Exit(1)
 
     if not container:
         containers = docker_client.containers.list()
@@ -63,7 +63,7 @@ def main(
             typer.echo(info_text("\nNo containers running\n"))
         else:
             display_containers_table(containers)
-        raise typer.Exit(1)
+        raise typer.Exit()
 
     try:
         docker_container = docker_client.containers.get(container)
