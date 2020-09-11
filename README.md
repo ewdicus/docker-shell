@@ -14,7 +14,7 @@ If you can use [pipx](https://github.com/pipxproject/pipx), then just that and i
 You can either install directly from the release (using version 0.1.0 as an example) via:
 
 ```sh
-pipx install https://github.com/ewdicus/docker-shell/archive/docker_shell-0.1.0-py3-none-any.whl
+$ pipx install https://github.com/ewdicus/docker-shell/releases/download/v0.1.0/docker_shell-0.1.0-py3-none-any.whl
 ```
 
 or, you can download the wheel from the releases and then follow step 4 below in [From source](#from-source).
